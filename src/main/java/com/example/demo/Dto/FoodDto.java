@@ -6,11 +6,8 @@ import lombok.Data;
 public class FoodDto {
     private String name; //이름
     private String manufacturer;//제조사
-    private String type;//종류
-
-    public FoodDto(String name, String manufacturer, String type) {
+    public FoodDto(String name, String manufacturer) {
         this.name = name;
         this.manufacturer = manufacturer;
-        this.type = type;
     }
 }

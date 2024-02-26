@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // 크로스 사이트
                 .cors(Customizer.withDefaults()) //크로스사이트
                 .authorizeHttpRequests(requests -> requests
+                        .requestMatchers(HttpMethod.GET).authenticated()
                         .requestMatchers("/login","/join").permitAll()
                         .requestMatchers(HttpMethod.POST).authenticated()
                 )

@@ -1,9 +1,7 @@
-package com.example.demo.Repository;
+package com.example.demo.Repository.Food;
 
 import com.example.demo.Entity.Food;
-import com.example.demo.Entity.Materials;
-import com.example.demo.Entity.QMaterials;
-import com.example.demo.Querydsl4RepositorySupport;
+import com.example.demo.util.Querydsl4RepositorySupport;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.example.demo.Entity.QFood.food;
-import static com.example.demo.Entity.QMaterials.materials;
 
 
 @Repository

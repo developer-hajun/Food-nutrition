@@ -1,17 +1,14 @@
-package com.example.demo.Repository;
+package com.example.demo.Repository.Memeber;
 
-import com.example.demo.Entity.Food;
 import com.example.demo.Entity.Member;
-import com.example.demo.Querydsl4RepositorySupport;
+import com.example.demo.util.Querydsl4RepositorySupport;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.Getter;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
-import static com.example.demo.Entity.QFood.food;
 import static com.example.demo.Entity.QMember.member;
 
 

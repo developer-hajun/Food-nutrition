@@ -19,7 +19,7 @@ public class Food {
 
     private String name; //이름
     private String manufacturer;//제조사
-    private String type;//종류
+//    private String type;//종류
 
     @Column(length = 1000)
     private String materials;
@@ -27,10 +27,18 @@ public class Food {
     @OneToMany(mappedBy = "food")
     private List<Materials> materialsList= new ArrayList<>();
 
-    public Food(String name, String manufacturer, String type,String materials) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "food_type_no")
+    private FoodType foodType;
+
+    public void setFoodType(FoodType foodType){
+        this.foodType = foodType;
+        foodType.getFoodList().add(this);
+    }
+    public Food(String name, String manufacturer,String materials) {
         this.name = name;
         this.manufacturer = manufacturer;
-        this.type = type;
+//        this.type = type;
         this.materials = materials;
     }
 }

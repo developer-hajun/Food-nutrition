@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.util;
 
 import com.mysema.commons.lang.Assert;
 import com.querydsl.core.types.EntityPath;

@@ -1,13 +1,13 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Dto.FoodDto;
-import com.example.demo.OpenApiManager;
-import com.example.demo.Repository.FoodRepository;
+import com.example.demo.util.OpenApiManager;
+import com.example.demo.Repository.Food.FoodRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,12 +18,13 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class Controller {
+public class ApiController {
     private final OpenApiManager openApiManager;
     private final FoodRepository foodRepository;
 
-    @GetMapping("openApi")
+    @GetMapping("/openApi")
     public void setUp() throws ParseException {
+        System.out.println("a");
         int start = 1;
         for(int i = 1;i<=10;i++){
             openApiManager.fetch(start,start+999);
@@ -31,10 +32,10 @@ public class Controller {
         }
     }
 
-    @GetMapping("find")
+    @PostMapping("/find")
     public List<FoodDto> fetch(@RequestParam List<String> name, int page) throws IOException, ParseException {
         List<FoodDto> right = foodRepository.ingredient_not_included(name).stream().map(f -> {
-            return new FoodDto(f.getName(), f.getType(), f.getManufacturer());
+            return new FoodDto(f.getName(), f.getManufacturer());
         }).toList();
         int p;
         if(page!=0) p = page*10;

@@ -1,4 +1,4 @@
-package com.example.demo.Repository;
+package com.example.demo.Repository.Memeber;
 
 import com.example.demo.Entity.Member;
 

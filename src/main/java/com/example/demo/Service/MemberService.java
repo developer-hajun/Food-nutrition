@@ -3,7 +3,7 @@ package com.example.demo.Service;
 import com.example.demo.Entity.Member;
 import com.example.demo.Exception.AppException;
 import com.example.demo.Exception.ErrorCode;
-import com.example.demo.Repository.MemberRepository;
+import com.example.demo.Repository.Memeber.MemberRepository;
 import com.example.demo.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

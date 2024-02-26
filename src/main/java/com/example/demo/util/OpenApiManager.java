@@ -1,8 +1,11 @@
-package com.example.demo;
+package com.example.demo.util;
 
 import com.example.demo.Entity.Food;
-import com.example.demo.Entity.Materials;
-import com.example.demo.Repository.FoodRepository;
+import com.example.demo.Entity.FoodType;
+import com.example.demo.Exception.AppException;
+import com.example.demo.Exception.ErrorCode;
+import com.example.demo.Repository.Food.FoodRepository;
+import com.example.demo.Repository.FoodTypeRepository;
 import com.example.demo.Repository.MaterialsRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
@@ -12,6 +15,8 @@ import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class OpenApiManager {
@@ -19,6 +24,7 @@ public class OpenApiManager {
 //    private final String pageNum = "/1;
 //    private final String pageCount = "/100";
     private final FoodRepository foodRepository;
+    private final FoodTypeRepository foodTypeRepository;
     private final MaterialsRepository materialsRepository;
 
     private String makeUrl(int a , int b) {
@@ -41,16 +47,19 @@ public class OpenApiManager {
         Food makeFood  = new Food(
                 food.get("PRDLST_NM").toString(),
                 food.get("BSSH_NM").toString(),
-                food.get("PRDLST_DCNM").toString(),
+//                food.get("PRDLST_DCNM").toString(),
                 food.get("RAWMTRL_NM").toString()
         );
         foodRepository.save(makeFood);
-//        String materials = food.get("RAWMTRL_NM").toString();
-//        String[] list = materials.split(",");
-//        for (String s : list) {
-//            Materials material = new Materials(s.trim());
-//            material.setFood(makeFood);
-//            materialsRepository.save(material);
-//        }
+        String food_type = food.get("PRDLST_DCNM").toString();
+        Optional<FoodType> byName = foodTypeRepository.findByName(food_type);
+        if(byName.isEmpty()){
+            FoodType foodType = new FoodType(food_type);
+            foodTypeRepository.save(foodType);
+            makeFood.setFoodType(foodType);
+        }
+        else{
+            makeFood.setFoodType(byName.get());
+        }
     }
 }
