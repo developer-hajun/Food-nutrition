@@ -5,9 +5,7 @@ import lombok.Data;
 @Data
 public class FoodDto {
     private String name; //이름
-    private String manufacturer;//제조사
-    public FoodDto(String name, String manufacturer) {
+    public FoodDto(String name) {
         this.name = name;
-        this.manufacturer = manufacturer;
     }
 }

@@ -18,27 +18,28 @@ public class Food {
     private Long id;
 
     private String name; //이름
-    private String manufacturer;//제조사
-//    private String type;//종류
 
     @Column(length = 1000)
     private String materials;
-
-    @OneToMany(mappedBy = "food")
-    private List<Materials> materialsList= new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "food_type_no")
     private FoodType foodType;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manufacturer_no")
+    private Manufacturer manufacturer;
+
     public void setFoodType(FoodType foodType){
         this.foodType = foodType;
         foodType.getFoodList().add(this);
     }
-    public Food(String name, String manufacturer,String materials) {
-        this.name = name;
+    public void setManufacturer(Manufacturer manufacturer){
         this.manufacturer = manufacturer;
-//        this.type = type;
+        manufacturer.getFoodList().add(this);
+    }
+    public Food(String name,String materials) {
+        this.name = name;
         this.materials = materials;
     }
 }

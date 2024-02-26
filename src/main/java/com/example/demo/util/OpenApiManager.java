@@ -2,11 +2,10 @@ package com.example.demo.util;
 
 import com.example.demo.Entity.Food;
 import com.example.demo.Entity.FoodType;
-import com.example.demo.Exception.AppException;
-import com.example.demo.Exception.ErrorCode;
+import com.example.demo.Entity.Manufacturer;
 import com.example.demo.Repository.Food.FoodRepository;
 import com.example.demo.Repository.FoodTypeRepository;
-import com.example.demo.Repository.MaterialsRepository;
+import com.example.demo.Repository.ManufacturerRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -24,8 +23,8 @@ public class OpenApiManager {
 //    private final String pageNum = "/1;
 //    private final String pageCount = "/100";
     private final FoodRepository foodRepository;
+    private final ManufacturerRepository manufacturerRepository;
     private final FoodTypeRepository foodTypeRepository;
-    private final MaterialsRepository materialsRepository;
 
     private String makeUrl(int a , int b) {
         return BASE_URL+"/"+a+"/"+b;
@@ -46,20 +45,28 @@ public class OpenApiManager {
     private void makeFood(JSONObject food){
         Food makeFood  = new Food(
                 food.get("PRDLST_NM").toString(),
-                food.get("BSSH_NM").toString(),
-//                food.get("PRDLST_DCNM").toString(),
                 food.get("RAWMTRL_NM").toString()
         );
         foodRepository.save(makeFood);
         String food_type = food.get("PRDLST_DCNM").toString();
-        Optional<FoodType> byName = foodTypeRepository.findByName(food_type);
-        if(byName.isEmpty()){
+        Optional<FoodType> type = foodTypeRepository.findByName(food_type);
+        String manufacturer = food.get("BSSH_NM").toString();
+        Optional<Manufacturer> made = manufacturerRepository.findByName(manufacturer);
+        if(type.isEmpty()){
             FoodType foodType = new FoodType(food_type);
             foodTypeRepository.save(foodType);
             makeFood.setFoodType(foodType);
         }
         else{
-            makeFood.setFoodType(byName.get());
+            makeFood.setFoodType(type.get());
+        }
+        if(made.isEmpty()){
+            Manufacturer manufacturer1 = new Manufacturer(manufacturer);
+            manufacturerRepository.save(manufacturer1);
+            makeFood.setManufacturer(manufacturer1);
+        }
+        else{
+            makeFood.setManufacturer(made.get());
         }
     }
 }

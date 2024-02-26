@@ -35,7 +35,7 @@ public class ApiController {
     @PostMapping("/find")
     public List<FoodDto> fetch(@RequestParam List<String> name, int page) throws IOException, ParseException {
         List<FoodDto> right = foodRepository.ingredient_not_included(name).stream().map(f -> {
-            return new FoodDto(f.getName(), f.getManufacturer());
+            return new FoodDto(f.getName());
         }).toList();
         int p;
         if(page!=0) p = page*10;
