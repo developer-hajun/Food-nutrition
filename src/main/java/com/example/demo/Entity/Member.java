@@ -19,5 +19,9 @@ public class Member {
     @CreationTimestamp
     private LocalDateTime localDateTime;
 
-
+    public Member(String id, String password, String name) {
+        this.id = id;
+        this.password = password;
+        this.name = name;
+    }
 }

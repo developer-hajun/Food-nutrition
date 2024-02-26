@@ -9,8 +9,10 @@ import lombok.Getter;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.example.demo.Entity.QFood.food;
+import static com.example.demo.Entity.QMember.member;
 
 
 @Repository
@@ -20,5 +22,10 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
     public MemberRepositoryImpl(EntityManager em) {
         super(Member.class);
         this.query = new JPAQueryFactory(em);
+    }
+
+    @Override
+    public Optional<Member> findByMemberId(String id) {
+        return Optional.ofNullable(selectFrom(member).where(member.id.eq(id)).fetchOne());
     }
 }
