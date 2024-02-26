@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface FoodRepositoryCustom {
 
-    public List<Food> ingredient_not_included(String name);
+    public List<Food> ingredient_not_included(List<String> name);
 }

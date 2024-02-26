@@ -1,7 +1,9 @@
 package com.example.demo;
 
 import com.example.demo.Entity.Food;
+import com.example.demo.Entity.Materials;
 import com.example.demo.Repository.FoodRepository;
+import com.example.demo.Repository.MaterialsRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,7 +18,8 @@ public class OpenApiManager {
     private final String BASE_URL = "https://openapi.foodsafetykorea.go.kr/api/9324483c1f8d49f28cbf/C002/json";
 //    private final String pageNum = "/1;
 //    private final String pageCount = "/100";
-    private final FoodRepository foodController;
+    private final FoodRepository foodRepository;
+    private final MaterialsRepository materialsRepository;
 
     private String makeUrl(int a , int b) {
         return BASE_URL+"/"+a+"/"+b;
@@ -41,12 +44,13 @@ public class OpenApiManager {
                 food.get("PRDLST_DCNM").toString(),
                 food.get("RAWMTRL_NM").toString()
         );
-        foodController.save(makeFood);
+        foodRepository.save(makeFood);
 //        String materials = food.get("RAWMTRL_NM").toString();
+//        String[] list = materials.split(",");
 //        for (String s : list) {
 //            Materials material = new Materials(s.trim());
 //            material.setFood(makeFood);
-//            materialsController.save(material);
+//            materialsRepository.save(material);
 //        }
     }
 }

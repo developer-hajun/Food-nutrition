@@ -1,7 +1,10 @@
 package com.example.demo.Repository;
 
 import com.example.demo.Entity.Food;
+import com.example.demo.Entity.Materials;
+import com.example.demo.Entity.QMaterials;
 import com.example.demo.Querydsl4RepositorySupport;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.Getter;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.example.demo.Entity.QFood.food;
+import static com.example.demo.Entity.QMaterials.materials;
 
 
 @Repository
@@ -22,7 +26,11 @@ public class FoodRepositoryImpl extends Querydsl4RepositorySupport implements Fo
     }
 
     @Override
-    public List<Food> ingredient_not_included(String name) {
-        return selectFrom(food).where(food.materials.notLike("%"+name+"%")).fetch();
+    public List<Food> ingredient_not_included(List<String> materials) {
+        BooleanBuilder whereBuilder = new BooleanBuilder();
+        for (String material : materials) {
+            whereBuilder.and(food.materials.notLike("%"+material+"%"));
+        }
+        return selectFrom(food).where(whereBuilder).fetch();
     }
 }
