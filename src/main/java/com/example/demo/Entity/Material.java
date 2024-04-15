@@ -5,24 +5,24 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Manufacturer {
-    //제조사
+public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "manufacturer_no")
+    @Column(name = "material_no")
     private Long no;
 
     private String name;
 
-    @OneToMany(mappedBy = "manufacturer")
-    private List<Food> foodList = new ArrayList<>();
-    public Manufacturer(String name) {
-        this.name = name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_no")
+    private Member member;
+
+    public void setMember(Member member) {
+        this.member = member;
+        member.getMaterialList().add(this);
+
     }
 }

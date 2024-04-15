@@ -4,8 +4,8 @@ import com.example.demo.Entity.Food;
 import com.example.demo.Entity.FoodType;
 import com.example.demo.Entity.Manufacturer;
 import com.example.demo.Repository.Food.FoodRepository;
-import com.example.demo.Repository.FoodTypeRepository;
-import com.example.demo.Repository.ManufacturerRepository;
+import com.example.demo.Repository.FoodType.FoodTypeRepository;
+import com.example.demo.Repository.Manufacturer.ManufacturerRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -20,8 +20,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OpenApiManager {
     private final String BASE_URL = "https://openapi.foodsafetykorea.go.kr/api/9324483c1f8d49f28cbf/C002/json";
-//    private final String pageNum = "/1;
-//    private final String pageCount = "/100";
     private final FoodRepository foodRepository;
     private final ManufacturerRepository manufacturerRepository;
     private final FoodTypeRepository foodTypeRepository;

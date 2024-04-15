@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,9 +24,12 @@ public class Member {
     @CreationTimestamp
     private LocalDateTime localDateTime;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Material> materialList = new ArrayList<>();
     public Member(String id, String password, String name) {
         this.id = id;
         this.password = password;
         this.name = name;
     }
+
 }

@@ -30,6 +30,7 @@ public class MemberService {
         Member member = new Member(id,EncodePassword,name);
         memberRepository.save(member);
     }
+    //member 생성
     public String login(String id,String password){
         Member member = memberRepository.findByMemberId(id).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND, "존재하지 않는 id입니다."));
         if(!encoder.matches(password,member.getPassword())){ //matchs왼쪽이 암호화 안된것 , 오른쪽이 암호화 된것
@@ -38,4 +39,5 @@ public class MemberService {
         String token = JwtTokenUtil.createToken(member.getNo(),key,expireTimeMs);
         return token;
     }
+    //member 로그인
 }

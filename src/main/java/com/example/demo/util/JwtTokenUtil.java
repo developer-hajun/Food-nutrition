@@ -3,9 +3,16 @@ package com.example.demo.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Getter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+@Component
+@Getter
 public class JwtTokenUtil {
     public static Boolean isExpired(String token,String secretKey){
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody()
