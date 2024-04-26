@@ -1,6 +1,8 @@
 package com.example.demo.Configuration;
 
 
+import com.example.demo.Service.MemberService;
+import com.example.demo.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     @Value("${jwt.token.secret}")
     private String secretKey;
+    private final MemberService memberService;
+    private final JwtTokenUtil jwtTokenUtil;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -27,14 +31,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // 크로스 사이트
                 .cors(Customizer.withDefaults()) //크로스사이트
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(HttpMethod.GET).authenticated()
                         .requestMatchers("/login","/join").permitAll()
+                        .requestMatchers(HttpMethod.GET).authenticated()
                         .requestMatchers(HttpMethod.POST).authenticated()
                 )
                 .sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                         )
-                .addFilterBefore(new JwtFilter(secretKey), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtFilter(secretKey,memberService,jwtTokenUtil), UsernamePasswordAuthenticationFilter.class);
 //                .exceptionHandling((exceptionConfig)->
 //                        exceptionConfig.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
         return http.build();

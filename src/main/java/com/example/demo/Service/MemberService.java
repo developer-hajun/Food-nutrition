@@ -11,6 +11,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -19,6 +23,7 @@ public class MemberService {
     private final BCryptPasswordEncoder encoder;
     @Value("${jwt.token.secret}")
     private String key;
+    private final JwtTokenUtil JwtTokenUtil;
     private Long expireTimeMs = 1000*60*60L;
 
     @Transactional
@@ -31,13 +36,23 @@ public class MemberService {
         memberRepository.save(member);
     }
     //member 생성
-    public String login(String id,String password){
+    public List<String> login(String id, String password){
         Member member = memberRepository.findByMemberId(id).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_FOUND, "존재하지 않는 id입니다."));
         if(!encoder.matches(password,member.getPassword())){ //matchs왼쪽이 암호화 안된것 , 오른쪽이 암호화 된것
             throw new AppException(ErrorCode.INVALID_PASSWORD, member.getPassword()+"비밀번호가 틀렷습니다");
         }
-        String token = JwtTokenUtil.createToken(member.getNo(),key,expireTimeMs);
+        String Access_token = JwtTokenUtil.createToken(member.getId(),member.getNo(),expireTimeMs);
+        String reFresh_token = JwtTokenUtil.createReFreshToken(member.getId(),member.getNo(),expireTimeMs);
+        List<String> token = new ArrayList<>();
+        token.add(Access_token);
+        token.add(reFresh_token);
         return token;
+    }
+    public Optional<Member> findMember(Long no){
+        return memberRepository.findById(no);
+    }
+    public Optional<Member> findByMemberID(String id){
+        return memberRepository.findByMemberId(id);
     }
     //member 로그인
 }

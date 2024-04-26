@@ -25,9 +25,9 @@ public class FoodService {
     private final FoodRepository foodRepository;
     private final ManufacturerRepository manufacturerRepository;
     private final FoodTypeRepository foodTypeRepository;
-
+    private final JwtTokenUtil jwtTokenUtil;
     public List<Food> MemberCanEat(String token){
-        Long no = JwtTokenUtil.getNo(token, key);
+        Long no = (Long) jwtTokenUtil.getclaims(token).get("no");
         List<String> memberMaterial = memberRepository.findMemberMaterial(no);
         return foodRepository.ingredient_not_included(memberMaterial);
     }//사용자가 자신이 못먹는것들을 등록해놓은 성분이 뺴고 들어가있는걸 찾기
