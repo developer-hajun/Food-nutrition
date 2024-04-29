@@ -24,8 +24,9 @@ public class Member {
     @CreationTimestamp
     private LocalDateTime localDateTime;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "member")
     private List<Material> materialList = new ArrayList<>();
+
     public Member(String id, String password, String name) {
         this.id = id;
         this.password = password;
