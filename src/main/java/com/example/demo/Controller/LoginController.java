@@ -5,7 +5,7 @@ import com.example.demo.Dto.MemberLoginDto;
 import com.example.demo.Dto.RefreshTokenDto;
 import com.example.demo.Dto.Token;
 import com.example.demo.Service.MemberService;
-import com.example.demo.Service.RefreshTokenService;
+import com.example.demo.Service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LoginController {
     private final MemberService memberService;
-    private final RefreshTokenService refreshTokenService;
+    private final TokenService refreshTokenService;
     @PostMapping("/join")
     public ResponseEntity<String> join(@RequestBody MemberJoinDto dto){
         memberService.join(dto.getId(), dto.getPassword(),dto.getName());

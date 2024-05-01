@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Entity.Food;
 import com.example.demo.Entity.FoodType;
+import com.example.demo.Entity.Material;
 import com.example.demo.Repository.Food.FoodRepository;
 import com.example.demo.Repository.FoodType.FoodTypeRepository;
 import com.example.demo.Repository.Manufacturer.ManufacturerRepository;
@@ -36,7 +37,9 @@ public class FoodService {
         return manufacturerRepository.findManufacturerFoods(name);
     }
     //제조사별 식품조회
-
+    public List<Food> Member_eat_food(List<String> food_name){
+        return foodRepository.ingredient_not_included(food_name);
+    }
     public List<Food> Find_FoodType(String name){
         Optional<FoodType> byName = foodTypeRepository.findByName(name);
         FoodType foodType = byName.get();
