@@ -4,25 +4,31 @@ import com.example.demo.Dto.FoodDto;
 import com.example.demo.Entity.Food;
 import com.example.demo.Entity.Material;
 import com.example.demo.Entity.Member;
+import com.example.demo.Repository.MaterialRepository;
 import com.example.demo.Service.FoodService;
 import com.example.demo.Service.FoodTypeService;
 import com.example.demo.Service.MemberService;
 import com.example.demo.Service.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class FoodController {
     private final MemberService memberService;
     private final FoodService foodService;
     private final TokenService tokenService;
+    private final MaterialRepository materialRepository;
     private final FoodTypeService foodTypeService;
-    @GetMapping("/member_food")
+    @GetMapping("/memberfood")
     public List<FoodDto> findMemberEatFood(HttpServletRequest request){
         String token = request.getHeader("authorization").substring(7);
         String token_id = tokenService.GetTokenId(token);
@@ -54,5 +60,16 @@ public class FoodController {
         return foodService.Find_FoodType(Type_name).stream().map(f->{
             return new FoodDto(f.getName());
         }).toList();
+    }
+
+    @GetMapping("/add")
+    public ResponseEntity<String> addMaterial(HttpServletRequest request, @RequestBody String name){
+        String token = request.getHeader("authorization").substring(7);
+        String token_id = tokenService.GetTokenId(token);
+        Member member = memberService.findByMemberID(token_id).get();
+        Material material = new Material(name);
+        material.setMember(member);
+        materialRepository.save(material);
+        return ResponseEntity.ok().body("SUCCESS");
     }
 }

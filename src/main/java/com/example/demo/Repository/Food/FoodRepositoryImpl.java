@@ -32,4 +32,5 @@ public class FoodRepositoryImpl extends Querydsl4RepositorySupport implements Fo
         System.out.println(2);
         return selectFrom(food).where(whereBuilder).fetch();
     }
+
 }
