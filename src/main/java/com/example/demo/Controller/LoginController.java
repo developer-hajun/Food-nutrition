@@ -6,6 +6,7 @@ import com.example.demo.Dto.RefreshTokenDto;
 import com.example.demo.Dto.Token;
 import com.example.demo.Service.MemberService;
 import com.example.demo.Service.TokenService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +35,10 @@ public class LoginController {
         return ResponseEntity.ok().body(token);
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity logout(@RequestBody RefreshTokenDto refreshToken){
-        refreshTokenService.deleteToken(refreshToken);
+    @PostMapping("/logouts")
+    public ResponseEntity logout(HttpServletRequest request){
+        String token = request.getHeader("RefreshToken").substring(7);
+        refreshTokenService.deleteToken(token);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

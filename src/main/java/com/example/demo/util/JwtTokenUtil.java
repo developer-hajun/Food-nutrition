@@ -1,5 +1,5 @@
 package com.example.demo.util;
-import com.example.demo.Repository.token.TokenRepository;
+import com.example.demo.Repository.token.RefreshTokenRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import java.util.List;
 public class JwtTokenUtil  {
     @Value("${jwt.token.secret}")
     private String secretKey;
-    private final TokenRepository tokenRepository;
+    private final RefreshTokenRepository tokenRepository;
 
     public Boolean isExpired(String token){
         byte[] accessSecret = secretKey.getBytes(StandardCharsets.UTF_8);

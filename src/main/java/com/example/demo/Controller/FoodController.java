@@ -28,7 +28,7 @@ public class FoodController {
     private final TokenService tokenService;
     private final MaterialRepository materialRepository;
     private final FoodTypeService foodTypeService;
-    @GetMapping("/memberfood")
+    @GetMapping("/member_food")
     public List<FoodDto> findMemberEatFood(HttpServletRequest request){
         String token = request.getHeader("authorization").substring(7);
         String token_id = tokenService.GetTokenId(token);
@@ -55,7 +55,8 @@ public class FoodController {
     }
 
 
-    public List<FoodDto> findType(String Type_name){
+    @GetMapping("/hajun")
+    public List<FoodDto> findType(@RequestBody String Type_name){
         //식품군의 이름을 가진 id를 ManufacturerService에서 가져오기
         return foodService.Find_FoodType(Type_name).stream().map(f->{
             return new FoodDto(f.getName());
