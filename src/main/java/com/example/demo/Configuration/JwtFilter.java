@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final String secretKey;
@@ -37,15 +38,19 @@ public class JwtFilter extends OncePerRequestFilter {
             UsernamePasswordAuthenticationToken authenticationToken = jwtTokenUtil.getAuthentication(AccessToken);
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
-        else if(refreshToken!=null && jwtTokenUtil.validateToken(refreshToken) && jwtTokenUtil.existRefreshKey(refreshToken)){
+        else if(refreshToken!=null && jwtTokenUtil.validateToken(refreshToken) && jwtTokenUtil.existRefreshKey(refreshToken)) {
             Claims getclaims = jwtTokenUtil.getclaims(refreshToken);
-            Long no = (Long) getclaims.get("no");
+            Long no = ((Number) getclaims.get("no")).longValue();
             String id = getclaims.getSubject();
             String new_token = jwtTokenUtil.createToken(id, no, expireTimeMs);
-            jwtTokenUtil.setHeaderAccessToken(response,new_token);
+            jwtTokenUtil.setHeaderAccessToken(response, new_token);
             System.out.println(new_token);
+            System.out.println(jwtTokenUtil.getclaims(new_token).getSubject());
             UsernamePasswordAuthenticationToken authenticationToken = jwtTokenUtil.getAuthentication(refreshToken);
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        }
+        else{
+            logger.error("토큰도만료 리스레스 토큰도 없거나 만료");
         }
         filterChain.doFilter(request,response);
     }

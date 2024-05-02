@@ -12,9 +12,9 @@ import com.example.demo.Service.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -46,7 +46,8 @@ public class FoodController {
         return list;
     }
 
-    public List<FoodDto> findManufacturer(String Manufacturer){
+
+    public List<FoodDto> findManufacturer(@RequestBody String Manufacturer){
         //식품군의 이름을 가진 id를 ManufacturerService에서 가져오기
         //식품에서 해당 id를 가진 food들을 가져와서 보여준다
         return foodService.Find_Manufacturer(Manufacturer).stream().map(f->{
@@ -56,7 +57,7 @@ public class FoodController {
 
 
     @GetMapping("/hajun")
-    public List<FoodDto> findType(@RequestBody String Type_name){
+    public List<FoodDto> findType(@RequestParam String Type_name){
         //식품군의 이름을 가진 id를 ManufacturerService에서 가져오기
         return foodService.Find_FoodType(Type_name).stream().map(f->{
             return new FoodDto(f.getName());
@@ -64,13 +65,16 @@ public class FoodController {
     }
 
     @GetMapping("/add")
-    public ResponseEntity<String> addMaterial(HttpServletRequest request, @RequestBody String name){
+    public ResponseEntity<String> addMaterial(HttpServletRequest request, @RequestParam String name){
         String token = request.getHeader("authorization").substring(7);
         String token_id = tokenService.GetTokenId(token);
-        Member member = memberService.findByMemberID(token_id).get();
-        Material material = new Material(name);
-        material.setMember(member);
-        materialRepository.save(material);
-        return ResponseEntity.ok().body("SUCCESS");
+        Optional<Member> optionalmember = memberService.findByMemberID(token_id);
+        if(optionalmember.isPresent()) {
+            Material material = new Material(name);
+            material.setMember(optionalmember.get());
+            materialRepository.save(material);
+            return ResponseEntity.ok().body("SUCCESS");
+        }
+        return ResponseEntity.ok().body("false");
     }
 }

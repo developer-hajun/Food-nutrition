@@ -56,6 +56,7 @@ public class JwtTokenUtil  {
         Claims claims = Jwts.claims().setSubject(id);
         claims.put("no", no);
         return Jwts.builder()
+                .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))//시작시간
                 .setExpiration(new Date(System.currentTimeMillis() + expireTimeMs * 100))//만료시간
 //                .signWith(SignatureAlgorithm.HS256,key)
