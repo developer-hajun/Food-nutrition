@@ -13,10 +13,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,13 +46,12 @@ public class FoodController {
         return list;
     }
 
-
-    public List<FoodDto> findManufacturer(@RequestBody String Manufacturer){
+    @GetMapping("/manufacturer")
+    public List<Food> findManufacturer(@RequestParam String Manufacturer, Principal principal){
         //식품군의 이름을 가진 id를 ManufacturerService에서 가져오기
         //식품에서 해당 id를 가진 food들을 가져와서 보여준다
-        return foodService.Find_Manufacturer(Manufacturer).stream().map(f->{
-            return new FoodDto(f.getName());
-        }).toList();
+        System.out.println(principal.getName()+"a");
+        return foodService.Find_Manufacturer(Manufacturer);
     }
 
 

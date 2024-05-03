@@ -3,6 +3,7 @@ package com.example.demo.Repository.Manufacturer;
 import com.example.demo.Entity.Food;
 import com.example.demo.Entity.Manufacturer;
 import com.example.demo.Entity.Material;
+import com.example.demo.Entity.QFood;
 import com.example.demo.util.Querydsl4RepositorySupport;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -22,8 +23,5 @@ public class ManufacturerRepositoryImpl extends Querydsl4RepositorySupport imple
         this.query = new JPAQueryFactory(em);
     }
 
-    @Override
-    public List<Food> findManufacturerFoods(String name) {
-        return select(manufacturer.foodList).from(manufacturer).where(manufacturer.name.eq(name)).fetchOne();
-    }
+
 }

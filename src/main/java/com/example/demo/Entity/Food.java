@@ -1,5 +1,6 @@
 package com.example.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,10 +25,12 @@ public class Food {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "food_type_no")
+    @JsonIgnore
     private FoodType foodType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manufacturer_no")
+    @JsonIgnore
     private Manufacturer manufacturer;
 
     public void setFoodType(FoodType foodType){

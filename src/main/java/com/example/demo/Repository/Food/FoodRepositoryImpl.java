@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.example.demo.Entity.QFood.food;
+import static com.example.demo.Entity.QManufacturer.manufacturer;
 
 
 @Repository
@@ -32,5 +33,8 @@ public class FoodRepositoryImpl extends Querydsl4RepositorySupport implements Fo
         System.out.println(2);
         return selectFrom(food).where(whereBuilder).fetch();
     }
-
+    @Override
+    public List<Food> findManufacturerFoods(String name) {
+        return select(food).from(manufacturer,food).where(food.manufacturer.name.eq(name)).distinct().fetch();
+    }
 }
