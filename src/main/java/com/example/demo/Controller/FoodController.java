@@ -68,6 +68,7 @@ public class FoodController {
         String token = request.getHeader("authorization").substring(7);
         String token_id = tokenService.GetTokenId(token);
         Optional<Member> optionalmember = memberService.findByMemberID(token_id);
+
         if(optionalmember.isPresent()) {
             Material material = new Material(name);
             material.setMember(optionalmember.get());

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.demo.Entity.QMaterial.material;
 import static com.example.demo.Entity.QMember.member;
 
 
@@ -29,7 +30,7 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
         return Optional.ofNullable(selectFrom(member).where(member.id.eq(id)).fetchOne());
     }
     public List<String> findMemberMaterial(Long no){
-        List<Material> materialList= select(member.materialList).from(member).where(member.no.eq(no)).fetchOne();
+        List<Material> materialList = selectFrom(material).join(material.member, member).fetchJoin().where(member.no.eq(no)).fetch();
         List<String> answer = new ArrayList<>();
         for(int i = 0; i< (materialList != null ? materialList.size() : 0); i++){
             Material material_value = materialList.get(i);

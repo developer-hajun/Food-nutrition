@@ -35,6 +35,7 @@ public class FoodRepositoryImpl extends Querydsl4RepositorySupport implements Fo
     }
     @Override
     public List<Food> findManufacturerFoods(String name) {
-        return select(food).from(manufacturer,food).where(food.manufacturer.name.eq(name)).distinct().fetch();
+        return selectFrom(food).join(food.manufacturer,manufacturer).fetchJoin().
+        where(manufacturer.name.eq(name)).distinct().fetch();
     }
 }
