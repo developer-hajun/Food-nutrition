@@ -26,11 +26,10 @@ public class FoodRepositoryImpl extends Querydsl4RepositorySupport implements Fo
     @Override
     public List<Food> ingredient_not_included(List<String> materials) {
         BooleanBuilder whereBuilder = new BooleanBuilder();
-        System.out.println(1);
         for (String material : materials) {
             whereBuilder.and(food.materials.notLike("%" + material + "%"));
         } // 다중 like문
-        System.out.println(2);
+
         return selectFrom(food).where(whereBuilder).fetch();
     }
     @Override
