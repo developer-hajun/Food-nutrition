@@ -2,8 +2,9 @@ package com.example.demo.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.redis.core.RedisHash;
 
-@Entity
+@RedisHash("refreshToken")
 @Data
 public class RefreshToken {
     @Id

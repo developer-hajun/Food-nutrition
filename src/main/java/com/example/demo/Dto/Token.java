@@ -6,7 +6,6 @@ import org.springframework.data.redis.core.RedisHash;
 
 @Getter
 @AllArgsConstructor
-@RedisHash("refreshToken")
 public class Token {
     private String AccessToken;
     private String ReFreshToken;
