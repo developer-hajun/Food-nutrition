@@ -11,4 +11,6 @@ public interface RefreshTokenRepository extends CrudRepository<RefreshToken,Long
     boolean existsByToken(String token);
 
     Optional<RefreshToken> findByToken(String token);
+
+    Optional<RefreshToken> findByUserNo(Long userNo);
 }

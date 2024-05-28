@@ -12,9 +12,11 @@ public class RefreshToken {
     @Column(name="token_no")
     private Long id;
     private String token;
+    private Long userNo;
 
-    public RefreshToken(String token) {
+    public RefreshToken(String token, Long userNo) {
         this.token = token;
+        this.userNo = userNo;
     }
 
     public RefreshToken() {

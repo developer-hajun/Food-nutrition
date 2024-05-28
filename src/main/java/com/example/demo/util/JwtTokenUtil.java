@@ -1,5 +1,5 @@
 package com.example.demo.util;
-import com.example.demo.Repository.token.RefreshTokenRepository;
+
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,6 @@ import java.util.List;
 public class JwtTokenUtil  {
     @Value("${jwt.token.secret}")
     private String secretKey;
-    private final RefreshTokenRepository tokenRepository;
 
     public Boolean isExpired(String token){
         byte[] accessSecret = secretKey.getBytes(StandardCharsets.UTF_8);
@@ -38,7 +37,7 @@ public class JwtTokenUtil  {
         return Jwts.builder()
                 .setClaims(claims)//정보를 넣어줌 claims가 포함된 jwt빌더를 반환
                 .setIssuedAt(new Date(System.currentTimeMillis()))//시작시간
-                .setExpiration(new Date(System.currentTimeMillis()+expireTimeMs))//만료시간
+                .setExpiration(new Date(System.currentTimeMillis()+1))//만료시간
 //                .signWith(SignatureAlgorithm.HS256,key)
                 .signWith(Keys.hmacShaKeyFor(accessSecret))
                 .compact();
@@ -46,9 +45,16 @@ public class JwtTokenUtil  {
     }
     public Claims getclaims(String token){
         byte[] parser_key = secretKey.getBytes(StandardCharsets.UTF_8);
-        Claims body = Jwts.parser().setSigningKey(Keys.hmacShaKeyFor(parser_key)).parseClaimsJws(token)
-                .getBody();
-        return body;
+        try {
+            Claims body = Jwts.parser().setSigningKey(Keys.hmacShaKeyFor(parser_key)).parseClaimsJws(token)
+                    .getBody();
+            return body;
+        }
+        catch (ExpiredJwtException e){
+            return e.getClaims();
+        }
+
+
     }
 
     public String createReFreshToken(String id,Long no,Long expireTimeMs) {
@@ -84,9 +90,6 @@ public class JwtTokenUtil  {
             log.info(e.getMessage());
             return false;
         }
-    }
-    public boolean existRefreshKey(String jwtToken){
-        return tokenRepository.existsByToken(jwtToken);
     }
     public UsernamePasswordAuthenticationToken getAuthentication(String token) {
         Object no = this.getclaims(token).get("no");

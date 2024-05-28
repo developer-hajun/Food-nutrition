@@ -15,8 +15,8 @@ import java.util.Optional;
 public class TokenService {
     private final RefreshTokenRepository tokenRepository;
     private final JwtTokenUtil jwtTokenUtil;
-    public void save(String token){
-        RefreshToken refreshToken = new RefreshToken(token);
+    public void save(String token,Long no){
+        RefreshToken refreshToken = new RefreshToken(token,no);
         tokenRepository.save(refreshToken);
     }
 

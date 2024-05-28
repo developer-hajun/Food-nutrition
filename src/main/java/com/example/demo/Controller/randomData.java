@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Random;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -24,12 +27,17 @@ public class randomData {
     private final MemberRepository memberRepository;
     @PostMapping("/createMember")
     public ResponseEntity<String> join2(){
+        LocalDateTime now = LocalDateTime.now();
         List<String> food_name = Arrays.asList("냉동연육","전분", "밀가루", "정제염", "소르빈산칼륨", "글루코노-δ-락톤", "L-글루타민산나트륨", "설탕","정제수", "타피오카전분", "가시오갈피분말","간장", "고춧가루", "마늘", "참기름", "생강", "들깨", "참깨");
         for(int i=0;i<100;i++){
             Member member = new Member("user"+Integer.toString(i),Integer.toString(i),"user"+Integer.toString(i));
             memberRepository.save(member);
         }
+        LocalDateTime last = LocalDateTime.now();
+        Duration diff = Duration.between(now, last);
+        System.out.println(diff);
         return ResponseEntity.ok().body("생성완료");
+
     }
     @PostMapping("/createMaterial")
     public ResponseEntity<String> join3(){
@@ -51,6 +59,7 @@ public class randomData {
             materialRepository.save(material2);
             materialRepository.save(material3);
         }
+
         return ResponseEntity.ok().body("생성완료");
     }
 }

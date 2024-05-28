@@ -1,6 +1,7 @@
 package com.example.demo.Configuration;
 
 
+
 import com.example.demo.Service.MemberService;
 import com.example.demo.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class SecurityConfig {
     private String secretKey;
     private final MemberService memberService;
     private final JwtTokenUtil jwtTokenUtil;
+    private final RedisConfig redisConfig;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -38,7 +40,7 @@ public class SecurityConfig {
                 .sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                         )
-                .addFilterBefore(new JwtFilter(secretKey,memberService,jwtTokenUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtFilter(secretKey,memberService,jwtTokenUtil,redisConfig), UsernamePasswordAuthenticationFilter.class);
 //                .exceptionHandling((exceptionConfig)->
 //                        exceptionConfig.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
         return http.build();

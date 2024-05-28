@@ -8,7 +8,6 @@ import com.example.demo.Repository.MaterialRepository;
 import com.example.demo.Service.FoodService;
 import com.example.demo.Service.FoodTypeService;
 import com.example.demo.Service.MemberService;
-import com.example.demo.Service.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,6 @@ import java.util.Optional;
 public class FoodController {
     private final MemberService memberService;
     private final FoodService foodService;
-    private final TokenService tokenService;
     private final MaterialRepository materialRepository;
     private final FoodTypeService foodTypeService;
     @GetMapping("/member_food")

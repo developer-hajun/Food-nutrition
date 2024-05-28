@@ -6,15 +6,18 @@ import com.example.demo.Entity.Manufacturer;
 import com.example.demo.Repository.Food.FoodRepository;
 import com.example.demo.Repository.FoodType.FoodTypeRepository;
 import com.example.demo.Repository.Manufacturer.ManufacturerRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+//import org.json.simple.JSONArray;
+//import org.json.simple.JSONObject;
+//import org.json.simple.parser.JSONParser;
+//import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Optional;
+import java.util. Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -28,27 +31,34 @@ public class OpenApiManager {
         return BASE_URL+"/"+a+"/"+b;
     }
 
-    public void fetch(int a,int b) throws ParseException {
+    public void fetch(int a,int b) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
         String jsonString = restTemplate.getForObject(makeUrl(a,b), String.class);
-        JSONParser jsonParser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonString);
-        JSONObject jsonC002 = (JSONObject) jsonObject.get("C002");
-        JSONArray jsonRow = (JSONArray) jsonC002.get("row");
-        for (Object o : jsonRow) {
-           makeFood((JSONObject) o);
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode json = objectMapper.readTree(jsonString);
+        JsonNode C002 = json.get("C002");
+        JsonNode row = C002.get("row");
+
+        if(row.isArray()){
+            JsonNode[] rowArray = new JsonNode[row.size()];
+            for (int i = 0; i < row.size(); i++) {
+                rowArray[i] = row.get(i);
+            }
+            for (JsonNode jsonNode : rowArray) {
+                makeFood(jsonNode);
+            }
         }
     }
 
-    private void makeFood(JSONObject food){
+    private void makeFood(JsonNode food){
         Food makeFood  = new Food(
-                food.get("PRDLST_NM").toString(),
-                food.get("RAWMTRL_NM").toString()
+                food.get("PRDLST_NM").asText(),
+                food.get("RAWMTRL_NM").asText()
         );
         foodRepository.save(makeFood);
-        String food_type = food.get("PRDLST_DCNM").toString();
+        String food_type = food.get("PRDLST_DCNM").asText();
         Optional<FoodType> type = foodTypeRepository.findByName(food_type);
-        String manufacturer = food.get("BSSH_NM").toString();
+        String manufacturer = food.get("BSSH_NM").asText();
         Optional<Manufacturer> made = manufacturerRepository.findByName(manufacturer);
         if(type.isEmpty()){
             FoodType foodType = new FoodType(food_type);
